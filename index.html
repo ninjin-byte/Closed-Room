@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>閉じた家</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400&family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0d0b;
+    --paper: #1a1814;
+    --text: #c8bfaa;
+    --text-dim: #6b6355;
+    --accent: #8a7a5a;
+    --accent-bright: #c4a96a;
+    --border: #2a2620;
+    --choice-bg: #141210;
+    --choice-hover: #1f1d18;
+    --choice-border: #3a3428;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Serif JP', 'Shippori Mincho', serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* グレインオーバーレイ */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.4;
+  }
+
+  #game {
+    width: 100%;
+    max-width: 640px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 0 24px;
+    position: relative;
+  }
+
+  /* ヘッダー */
+  #header {
+    padding: 32px 0 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px solid var(--border);
+  }
+
+  #location-name {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    transition: opacity 0.8s;
+  }
+
+  #step-count {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+  }
+
+  /* メインテキストエリア */
+  #scene-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 48px 0 32px;
+    min-height: 340px;
+  }
+
+  #scene-text {
+    font-size: 15px;
+    line-height: 2.2;
+    letter-spacing: 0.06em;
+    color: var(--text);
+    opacity: 0;
+    transition: opacity 0.9s ease;
+    white-space: pre-wrap;
+  }
+
+  #scene-text.visible { opacity: 1; }
+
+  /* 環境描写（サブテキスト） */
+  #ambient-text {
+    margin-top: 24px;
+    font-size: 12px;
+    line-height: 2;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    font-style: italic;
+    opacity: 0;
+    transition: opacity 1.2s ease 0.4s;
+  }
+  #ambient-text.visible { opacity: 1; }
+
+  /* 選択肢エリア */
+  #choices-area {
+    padding-bottom: 48px;
+    opacity: 0;
+    transition: opacity 0.6s ease 0.6s;
+  }
+  #choices-area.visible { opacity: 1; }
+
+  #choices-label {
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+  }
+
+  .choice-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: var(--choice-bg);
+    border: 1px solid var(--choice-border);
+    color: var(--text);
+    font-family: 'Noto Serif JP', serif;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    line-height: 1.8;
+    padding: 14px 20px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .choice-btn::before {
+    content: '›';
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-dim);
+    font-size: 14px;
+    transition: left 0.2s, color 0.2s;
+  }
+
+  .choice-btn:hover {
+    background: var(--choice-hover);
+    border-color: var(--accent);
+    color: var(--accent-bright);
+  }
+
+  .choice-btn:hover::before {
+    left: 12px;
+    color: var(--accent-bright);
+  }
+
+  /* タイトル画面 */
+  #title-screen {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    transition: opacity 1.5s ease;
+  }
+
+  #title-screen.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  #title-main {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 36px;
+    font-weight: 500;
+    letter-spacing: 0.5em;
+    color: var(--text);
+    margin-bottom: 8px;
+    opacity: 0;
+    animation: fadeUp 1.5s ease 0.5s forwards;
+  }
+
+  #title-sub {
+    font-size: 11px;
+    letter-spacing: 0.5em;
+    color: var(--text-dim);
+    margin-bottom: 64px;
+    opacity: 0;
+    animation: fadeUp 1.5s ease 1s forwards;
+  }
+
+  #start-btn {
+    background: none;
+    border: 1px solid var(--accent);
+    color: var(--accent-bright);
+    font-family: 'Noto Serif JP', serif;
+    font-size: 12px;
+    letter-spacing: 0.4em;
+    padding: 14px 40px;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+    opacity: 0;
+    animation: fadeUp 1.5s ease 1.6s forwards;
+  }
+
+  #start-btn:hover {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  /* 区切り線 */
+  .divider {
+    width: 32px;
+    height: 1px;
+    background: var(--border);
+    margin: 28px 0;
+  }
+
+  /* フェードアニメーション */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* 画面遷移オーバーレイ */
+  #overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s ease;
+    z-index: 30;
+  }
+  #overlay.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* メモ帳（サイドバー的なもの） */
+  #memo {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    text-align: right;
+    line-height: 2;
+    opacity: 0;
+    transition: opacity 1s ease 1s;
+  }
+  #memo.visible { opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- タイトル画面 -->
+<div id="title-screen">
+  <div id="title-main">閉じた家</div>
+  <div id="title-sub">a psychological exploration</div>
+  <button id="start-btn" onclick="startGame()">は じ め る</button>
+</div>
+
+<!-- 画面遷移オーバーレイ -->
+<div id="overlay"></div>
+
+<!-- ゲーム本体 -->
+<div id="game">
+  <div id="header">
+    <div id="location-name">—</div>
+    <div id="step-count"></div>
+  </div>
+
+  <div id="scene-area">
+    <div id="scene-text"></div>
+    <div id="ambient-text"></div>
+  </div>
+
+  <div id="choices-area">
+    <div id="choices-label">— 行動を選ぶ —</div>
+    <div id="choices-container"></div>
+  </div>
+</div>
+
+<div id="memo"></div>
+
+<script>
+// ============================================================
+// ゲームデータ
+// ============================================================
+const scenes = {
+
+  // ---- 道路（開始地点） ----
+  road: {
+    location: '道路 / 敷地の外',
+    text: `気がつくと、見覚えのある道路に立っていた。
+
+アスファルトの感触。遠くの車の音。
+正面に、古い家がある。`,
+    ambient: '昼の光が柔らかく落ちている。風がある。少しだけ、息ができる気がした。',
+    choices: [
+      { label: '家に近づく', next: 'approach' },
+      { label: 'しばらく外から眺める', next: 'road_watch' },
+    ]
+  },
+
+  road_watch: {
+    location: '道路 / 敷地の外',
+    text: `遠くから家を見る。
+
+ただの家に見える。古くて、少し傾いた屋根。
+剥げかけた外壁。
+
+でもここに入っていくと、何かが変わる気がした。
+それを知っている。`,
+    ambient: '敷地の外は、静かに安全だ。',
+    choices: [
+      { label: '覚悟を決めて近づく', next: 'approach' },
+    ]
+  },
+
+  // ---- 玄関前 ----
+  approach: {
+    location: '玄関前',
+    text: `玄関の前に立った。
+
+左側に、たぬきの置物がある。
+子どもの頃からずっとここにある。
+昔はこれが怖かった。理由は思い出せない。`,
+    ambient: '置物はこちらを向いている。いつも通り。',
+    choices: [
+      { label: 'たぬきをよく見る', next: 'tanuki_look' },
+      { label: 'そのまま玄関を開ける', next: 'entrance' },
+    ]
+  },
+
+  tanuki_look: {
+    location: '玄関前 / たぬきの置物',
+    text: `じっと見ると、何かが変だと気づいた。
+
+噛んでくるかもしれない。
+噛んでこないかもしれない。
+
+どちらも同時に本当のような気がして、
+どちらでもあり、どちらでもない。`,
+    ambient: '置物は動かない。でも、可能性は揺れている。',
+    choices: [
+      { label: '意を決して通り過ぎる', next: 'entrance' },
+      { label: '立ち止まり、もう少し見る', next: 'tanuki_wait' },
+    ]
+  },
+
+  tanuki_wait: {
+    location: '玄関前 / たぬきの置物',
+    text: `しばらく眺めていたが、何も起きなかった。
+
+怖いと思うことと、
+実際に危ないことは、
+別の話かもしれない。`,
+    ambient: '風が少し吹いた。置物は動かない。',
+    choices: [
+      { label: '玄関を開ける', next: 'entrance' },
+    ]
+  },
+
+  // ---- 玄関ホール ----
+  entrance: {
+    location: '玄関',
+    text: `玄関をくぐった。
+
+何も起きなかった。
+
+土間の匂い。薄暗い廊下。
+靴箱の上に、誰かの傘が立てかけてある。`,
+    ambient: '外の音が遠くなった。家の中は静かだ。',
+    choices: [
+      { label: '1階・台所へ進む', next: 'kitchen' },
+      { label: '振り返って玄関を見る', next: 'entrance_back' },
+    ]
+  },
+
+  entrance_back: {
+    location: '玄関',
+    text: `振り返ると、外の光が見えた。
+
+道路がある。
+出ようと思えば、いつでも出られる。
+
+それを確認してから、奥へ進んだ。`,
+    ambient: '外は安全だ。いつでも戻れる。',
+    choices: [
+      { label: '1階・台所へ進む', next: 'kitchen' },
+    ]
+  },
+
+  // ---- 1階・台所 ----
+  kitchen: {
+    location: '1階 / 台所',
+    text: `台所に、祖母がいた。
+
+包丁を持ったまま、まな板の前に立って——
+止まっていた。
+
+声をかけても、動かない。
+悪意はない。ただ、止まっている。`,
+    ambient: '換気扇の音だけが、かすかに聞こえる。',
+    choices: [
+      { label: 'もう一度声をかける', next: 'kitchen_call' },
+      { label: '階段へ向かう', next: 'stairs' },
+    ]
+  },
+
+  kitchen_call: {
+    location: '1階 / 台所',
+    text: `もう一度、声をかけた。
+
+変化はなかった。
+
+ここにいる人は、何かの途中で
+止まっているのかもしれない。
+
+それ以上でも、それ以下でもない。`,
+    ambient: 'この場所では、何も起きない。',
+    choices: [
+      { label: '階段へ向かう', next: 'stairs' },
+    ]
+  },
+
+  // ---- 階段・鏡 ----
+  stairs: {
+    location: '階段 / 踊り場',
+    text: `階段の途中に、洗面台がある。
+そこに鏡があった。
+
+昔は真っ黒だった。
+何も映らなかった。それが安心だった。
+
+今は——グレーで、うっすらと
+自分のシルエットが映っている。`,
+    ambient: 'ぼんやりした輪郭。影のような自分。',
+    choices: [
+      { label: 'しばらく鏡を見る', next: 'mirror_look' },
+      { label: '目をそらして2階へ上がる', next: 'floor2_intro' },
+    ]
+  },
+
+  mirror_look: {
+    location: '階段 / 踊り場',
+    text: `輪郭だけが映っている。
+
+表情は見えない。
+でも、確かに自分の形をしている。
+
+怖くない——ようになった気がする。
+たぶん。慣れた、ということかもしれない。`,
+    ambient: 'BGMが低く、静かに変わっていく。',
+    choices: [
+      { label: '2階へ上がる', next: 'floor2_intro' },
+    ]
+  },
+
+  // ---- 2階（今回はここまで） ----
+  floor2_intro: {
+    location: '2階 / 廊下',
+    text: `2階の廊下に出た。
+
+左に、母の部屋のドアがある。
+右に、自分の部屋のドアがある。
+
+廊下の奥の窓から、外の光が差し込んでいた。`,
+    ambient: '——（試用版はここまでです）',
+    choices: [
+      { label: '最初からやり直す', next: 'road', reset: true },
+    ]
+  },
+
+};
+
+// ============================================================
+// ゲームエンジン
+// ============================================================
+let currentScene = 'road';
+let stepCount = 0;
+let gameStarted = false;
+
+function startGame() {
+  document.getElementById('title-screen').classList.add('hidden');
+  setTimeout(() => {
+    gameStarted = true;
+    loadScene('road');
+    document.getElementById('memo').classList.add('visible');
+  }, 1500);
+}
+
+function loadScene(sceneId, delay = 0) {
+  const overlay = document.getElementById('overlay');
+
+  overlay.classList.add('active');
+
+  setTimeout(() => {
+    const scene = scenes[sceneId];
+    currentScene = sceneId;
+
+    // テキストをリセット
+    const sceneText = document.getElementById('scene-text');
+    const ambientText = document.getElementById('ambient-text');
+    const choicesArea = document.getElementById('choices-area');
+
+    sceneText.classList.remove('visible');
+    ambientText.classList.remove('visible');
+    choicesArea.classList.remove('visible');
+
+    // ロケーション更新
+    document.getElementById('location-name').textContent = scene.location;
+
+    // ステップカウント
+    if (!scene.noCount) stepCount++;
+    document.getElementById('step-count').textContent = `${stepCount} steps`;
+
+    // オーバーレイを外す
+    overlay.classList.remove('active');
+
+    setTimeout(() => {
+      // テキストをセット＆表示
+      sceneText.textContent = scene.text;
+      sceneText.classList.add('visible');
+
+      if (scene.ambient) {
+        ambientText.textContent = scene.ambient;
+        ambientText.classList.add('visible');
+      } else {
+        ambientText.textContent = '';
+      }
+
+      // 選択肢を生成
+      const container = document.getElementById('choices-container');
+      container.innerHTML = '';
+
+      scene.choices.forEach(choice => {
+        const btn = document.createElement('button');
+        btn.className = 'choice-btn';
+        btn.textContent = choice.label;
+        btn.onclick = () => handleChoice(choice);
+        container.appendChild(btn);
+      });
+
+      choicesArea.classList.add('visible');
+
+      // メモ欄
+      document.getElementById('memo').textContent =
+        `${scene.location}\n${stepCount} steps`;
+
+    }, 400);
+
+  }, delay + 600);
+}
+
+function handleChoice(choice) {
+  if (choice.reset) stepCount = 0;
+  loadScene(choice.next);
+}
+
+</script>
+</body>
+</html>
