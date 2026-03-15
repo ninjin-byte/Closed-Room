@@ -566,6 +566,22 @@
         currentBgm.volume = 0.4;
         currentBgm.play().catch(() => {}); // 自動再生エラーを無視
       }
+
+      // ============================================================
+      // SE管理
+      // ============================================================
+      const se = {
+        click: new Audio("se_click.mp3"),
+        keyboard: new Audio("se_keyboard.mp3"),
+      };
+
+      function playSe(name) {
+        const sound = se[name];
+        if (!sound) return;
+        sound.currentTime = 0;
+        sound.play().catch(() => {});
+      }
+
       // ============================================================
       // ゲームデータ
       // ============================================================
@@ -1055,6 +1071,7 @@
                 item.type === "ai" ? "var(--text-dim)" : "var(--text)";
               line.style.cssText = `color:${color}; margin-bottom:6px; opacity:0; transition:opacity 0.6s ease;`;
               line.textContent = `${prefix}${item.text}`;
+              playSe("keyboard"); // ← この1行を追加
               logInner.appendChild(line);
               requestAnimationFrame(() =>
                 requestAnimationFrame(() => {
@@ -1175,6 +1192,7 @@
       }
 
       function handleChoice(choice) {
+        playSe("click");
         if (choice.reset) stepCount = 0;
         loadScene(choice.next);
       }
