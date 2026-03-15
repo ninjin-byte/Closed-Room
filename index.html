@@ -470,6 +470,26 @@
       #memo.visible {
         opacity: 1;
       }
+      #lang-btn {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        z-index: 100;
+        background: transparent;
+        border: 1px solid var(--text-dim);
+        color: var(--text-dim);
+        font-size: 0.75rem;
+        letter-spacing: 0.1em;
+        padding: 4px 10px;
+        cursor: pointer;
+        transition:
+          color 0.3s,
+          border-color 0.3s;
+      }
+      #lang-btn:hover {
+        color: var(--text);
+        border-color: var(--text);
+      }
     </style>
   </head>
   <body>
@@ -515,6 +535,7 @@
     </div>
 
     <div id="memo"></div>
+    <button id="lang-btn" onclick="toggleLang()">EN</button>
 
     <script>
       // ============================================================
@@ -590,21 +611,37 @@
         road: {
           bg: "house",
           location: "道路 / 敷地の外",
+          location_en: "Road / Outside",
           text: `気がつくと、見覚えのある道路に立っていた。
 
 アスファルトの感触。遠くの車の音。
 正面に、古い家がある。`,
+          text_en: `I found myself standing on a familiar road.
+
+The asphalt beneath my feet. The distant sound of cars.
+Ahead, an old house.`,
           ambient:
             "昼の光が柔らかく落ちている。風がある。少しだけ、息ができる気がした。",
+          ambient_en:
+            "The afternoon light falls softly. There's a breeze. For a moment, I feel like I can breathe.",
           choices: [
-            { label: "家に近づく", next: "approach" },
-            { label: "しばらく外から眺める", next: "road_watch" },
+            {
+              label: "家に近づく",
+              label_en: "Approach the house",
+              next: "approach",
+            },
+            {
+              label: "しばらく外から眺める",
+              label_en: "Watch from outside for a while",
+              next: "road_watch",
+            },
           ],
         },
 
         road_watch: {
           bg: "house",
           location: "道路 / 敷地の外",
+          location_en: "Road / Outside",
           text: `遠くから家を見る。
 
 ただの家に見える。古くて、少し傾いた屋根。
@@ -612,29 +649,59 @@
 
 でもここに入っていくと、何かが変わる気がした。
 それを知っている。`,
+          text_en: `I watch the house from a distance.
+
+It looks like just a house. Old, with a slightly tilted roof.
+Paint peeling from the walls.
+
+But I know — something changes when I step inside.
+I know this.`,
           ambient: "敷地の外は、静かに安全だ。",
-          choices: [{ label: "覚悟を決めて近づく", next: "approach" }],
+          ambient_en: "Out here, beyond the gate, it's quietly safe.",
+          choices: [
+            {
+              label: "覚悟を決めて近づく",
+              label_en: "Gather your courage and step forward",
+              next: "approach",
+            },
+          ],
         },
 
         // ---- 玄関前 ----
         approach: {
           bg: "house",
           location: "玄関前",
+          location_en: "Front Door",
           text: `玄関の前に立った。
 
 左側に、たぬきの置物がある。
 子どもの頃からずっとここにある。
 昔はこれが怖かった。理由は思い出せない。`,
+          text_en: `I stood before the front door.
+
+To the left, a ceramic tanuki figurine.
+It's been here since I was a child.
+I used to be afraid of it. I can't remember why.`,
           ambient: "置物はこちらを向いている。いつも通り。",
+          ambient_en: "The figurine faces this way. Same as always.",
           choices: [
-            { label: "たぬきをよく見る", next: "tanuki_look" },
-            { label: "そのまま玄関を開ける", next: "entrance" },
+            {
+              label: "たぬきをよく見る",
+              label_en: "Look closely at the tanuki",
+              next: "tanuki_look",
+            },
+            {
+              label: "そのまま玄関を開ける",
+              label_en: "Open the front door",
+              next: "entrance",
+            },
           ],
         },
 
         tanuki_look: {
           bg: "house",
           location: "玄関前 / たぬきの置物",
+          location_en: "Front Door / Tanuki Figurine",
           text: `じっと見ると、何かが変だと気づいた。
 
 噛んでくるかもしれない。
@@ -642,59 +709,119 @@
 
 どちらも同時に本当のような気がして、
 どちらでもあり、どちらでもない。`,
+          text_en: `Looking closely, I noticed something felt off.
+
+It might bite.
+It might not.
+
+Both felt equally true at the same time —
+both and neither.`,
           ambient: "置物は動かない。でも、可能性は揺れている。",
+          ambient_en: "The figurine doesn't move. But the possibilities shift.",
           choices: [
-            { label: "意を決して通り過ぎる", next: "entrance" },
-            { label: "立ち止まり、もう少し見る", next: "tanuki_wait" },
+            {
+              label: "意を決して通り過ぎる",
+              label_en: "Steel yourself and pass by",
+              next: "entrance",
+            },
+            {
+              label: "立ち止まり、もう少し見る",
+              label_en: "Stop and look a little longer",
+              next: "tanuki_wait",
+            },
           ],
         },
 
         tanuki_wait: {
           bg: "house",
           location: "玄関前 / たぬきの置物",
+          location_en: "Front Door / Tanuki Figurine",
           text: `しばらく眺めていたが、何も起きなかった。
 
 怖いと思うことと、
 実際に危ないことは、
 別の話かもしれない。`,
+          text_en: `I watched it for a while. Nothing happened.
+
+Being afraid of something
+and something actually being dangerous —
+those might be different things.`,
           ambient: "風が少し吹いた。置物は動かない。",
-          choices: [{ label: "玄関を開ける", next: "entrance" }],
+          ambient_en: "A little wind. The figurine doesn't move.",
+          choices: [
+            {
+              label: "玄関を開ける",
+              label_en: "Open the front door",
+              next: "entrance",
+            },
+          ],
         },
 
         // ---- 玄関ホール ----
         entrance: {
           bg: "entrance",
           location: "玄関",
+          location_en: "Entryway",
           text: `玄関をくぐった。
 
 何も起きなかった。
 
 土間の匂い。薄暗い廊下。
 靴箱の上に、誰かの傘が立てかけてある。`,
+          text_en: `I stepped through the front door.
+
+Nothing happened.
+
+The smell of the entryway. A dim hallway.
+Someone's umbrella leaning against the shoe cabinet.`,
           ambient: "外の音が遠くなった。家の中は静かだ。",
+          ambient_en: "The sounds outside grew distant. The house is quiet.",
           choices: [
-            { label: "1階・台所へ進む", next: "kitchen" },
-            { label: "振り返って玄関を見る", next: "entrance_back" },
+            {
+              label: "1階・台所へ進む",
+              label_en: "Go to the kitchen",
+              next: "kitchen",
+            },
+            {
+              label: "振り返って玄関を見る",
+              label_en: "Turn and look back at the entrance",
+              next: "entrance_back",
+            },
           ],
         },
 
         entrance_back: {
           bg: "entrance",
           location: "玄関",
+          location_en: "Entryway",
           text: `振り返ると、外の光が見えた。
 
 道路がある。
 出ようと思えば、いつでも出られる。
 
 それを確認してから、奥へ進んだ。`,
+          text_en: `I turned around. I could see the light outside.
+
+The road is there.
+I can leave whenever I want.
+
+I confirmed that — then walked deeper inside.`,
           ambient: "外は安全だ。いつでも戻れる。",
-          choices: [{ label: "1階・台所へ進む", next: "kitchen" }],
+          ambient_en: "Outside is safe. I can always go back.",
+          choices: [
+            {
+              label: "1階・台所へ進む",
+              label_en: "Go to the kitchen",
+              next: "kitchen",
+            },
+          ],
         },
 
         // ---- 1階・台所 ----
         kitchen: {
           bg: "kitchen",
           location: "1階 / 台所",
+          location_en: "1F / Kitchen",
           text: `台所に、祖母がいた。
 
 包丁を持ったまま、まな板の前に立って——
@@ -702,16 +829,33 @@
 
 声をかけても、動かない。
 悪意はない。ただ、止まっている。`,
+          text_en: `My grandmother was in the kitchen.
+
+She stood at the cutting board, holding a knife ——
+and had stopped.
+
+I called out. She didn't move.
+No malice. She's just... stopped.`,
           ambient: "換気扇の音だけが、かすかに聞こえる。",
+          ambient_en: "Only the faint sound of the ventilation fan.",
           choices: [
-            { label: "もう一度声をかける", next: "kitchen_call" },
-            { label: "階段へ向かう", next: "stairs" },
+            {
+              label: "もう一度声をかける",
+              label_en: "Call out again",
+              next: "kitchen_call",
+            },
+            {
+              label: "階段へ向かう",
+              label_en: "Head to the stairs",
+              next: "stairs",
+            },
           ],
         },
 
         kitchen_call: {
           bg: "kitchen",
           location: "1階 / 台所",
+          location_en: "1F / Kitchen",
           text: `もう一度、声をかけた。
 
 変化はなかった。
@@ -720,14 +864,30 @@
 止まっているのかもしれない。
 
 それ以上でも、それ以下でもない。`,
+          text_en: `I called out again.
+
+Nothing changed.
+
+Maybe the people here
+are paused somewhere in the middle of something.
+
+Nothing more. Nothing less.`,
           ambient: "この場所では、何も起きない。",
-          choices: [{ label: "階段へ向かう", next: "stairs" }],
+          ambient_en: "Nothing happens in this place.",
+          choices: [
+            {
+              label: "階段へ向かう",
+              label_en: "Head to the stairs",
+              next: "stairs",
+            },
+          ],
         },
 
         // ---- 階段・鏡 ----
         stairs: {
           bg: "stairs",
           location: "階段 / 踊り場",
+          location_en: "Stairs / Landing",
           text: `階段の途中に、洗面台がある。
 そこに鏡があった。
 
@@ -736,16 +896,34 @@
 
 今は——グレーで、うっすらと
 自分のシルエットが映っている。`,
+          text_en: `Halfway up the stairs, there's a sink.
+And a mirror.
+
+It used to be completely black.
+Nothing reflected. That felt safe.
+
+Now — it's grey, and faintly,
+my silhouette shows through.`,
           ambient: "ぼんやりした輪郭。影のような自分。",
+          ambient_en: "A blurred outline. A shadow of myself.",
           choices: [
-            { label: "しばらく鏡を見る", next: "mirror_look" },
-            { label: "目をそらして2階へ上がる", next: "floor2_intro" },
+            {
+              label: "しばらく鏡を見る",
+              label_en: "Look at the mirror for a while",
+              next: "mirror_look",
+            },
+            {
+              label: "目をそらして2階へ上がる",
+              label_en: "Look away and go upstairs",
+              next: "floor2_intro",
+            },
           ],
         },
 
         mirror_look: {
           bg: "stairs",
           location: "階段 / 踊り場",
+          location_en: "Stairs / Landing",
           text: `輪郭だけが映っている。
 
 表情は見えない。
@@ -753,24 +931,55 @@
 
 怖くない——ようになった気がする。
 たぶん。慣れた、ということかもしれない。`,
+          text_en: `Only my outline is there.
+
+No expression visible.
+But it's clearly my shape.
+
+I think I'm no longer afraid —
+maybe. Perhaps I've just gotten used to it.`,
           ambient: "BGMが低く、静かに変わっていく。",
-          choices: [{ label: "2階へ上がる", next: "floor2_intro" }],
+          ambient_en: "The music shifts low and quiet.",
+          choices: [
+            {
+              label: "2階へ上がる",
+              label_en: "Go upstairs",
+              next: "floor2_intro",
+            },
+          ],
         },
 
         // ---- 2階・廊下 ----
         floor2_intro: {
           bg: "hallway",
           location: "2階 / 廊下",
+          location_en: "2F / Hallway",
           text: `2階の廊下に出た。
 
 左に、母の部屋のドアがある。
 右に、自分の部屋のドアがある。
 
 廊下の奥の窓から、外の光が差し込んでいた。`,
+          text_en: `I came out into the second-floor hallway.
+
+To the left, the door to my mother's room.
+To the right, the door to my own room.
+
+Light from the window at the end of the hall
+fell across the floor.`,
           ambient: "しんとしている。1階とは空気が違う。",
+          ambient_en: "Still. The air here is different from downstairs.",
           choices: [
-            { label: "母の部屋に近づく", next: "mother_approach" },
-            { label: "自分の部屋へ向かう", next: "myroom_intro" },
+            {
+              label: "母の部屋に近づく",
+              label_en: "Approach my mother's room",
+              next: "mother_approach",
+            },
+            {
+              label: "自分の部屋へ向かう",
+              label_en: "Head to my own room",
+              next: "myroom_intro",
+            },
           ],
         },
 
@@ -778,6 +987,7 @@
         mother_approach: {
           bg: "hallway",
           location: "2階 / 母の部屋前",
+          location_en: "2F / Outside Mother's Room",
           text: `母の部屋のドアに近づいた。
 
 後ろ向きでうずくまる気配が、
@@ -785,16 +995,33 @@
 
 引き寄せられるように、
 ノブに手が伸びた。`,
+          text_en: `I approached my mother's door.
+
+Something crouched, facing away —
+I could feel it through the door.
+
+As if drawn in,
+my hand reached for the knob.`,
           ambient: "ドアの向こうに、何かがいる。",
+          ambient_en: "Something is on the other side.",
           choices: [
-            { label: "ドアを開ける", next: "mother_attack" },
-            { label: "やめて自分の部屋へ戻る", next: "myroom_intro" },
+            {
+              label: "ドアを開ける",
+              label_en: "Open the door",
+              next: "mother_attack",
+            },
+            {
+              label: "やめて自分の部屋へ戻る",
+              label_en: "Stop and go to my own room",
+              next: "myroom_intro",
+            },
           ],
         },
 
         mother_attack: {
           bg: "hallway",
           location: "2階 / 母の部屋",
+          location_en: "2F / Mother's Room",
           noCount: false,
           text: `ドアを開けた瞬間、空気が変わった。
 
@@ -803,9 +1030,21 @@
 
 窓へ。ベランダへ。屋根へ。
 そして道路へ。`,
+          text_en: `The moment I opened the door, the air changed.
+
+I have to run ——
+my body moved before my mind could.
+
+To the window. To the balcony. To the roof.
+And then to the road.`,
           ambient: "敷地の外に出ると、何も追ってこなかった。",
+          ambient_en: "Once outside the gate, nothing followed.",
           choices: [
-            { label: "一息ついて、もう一度中へ戻る", next: "floor2_intro" },
+            {
+              label: "一息ついて、もう一度中へ戻る",
+              label_en: "Catch your breath and go back inside",
+              next: "floor2_intro",
+            },
           ],
         },
 
@@ -813,6 +1052,7 @@
         myroom_intro: {
           bg: "room",
           location: "2階 / 自分の部屋",
+          location_en: "2F / My Room",
           text: `自分の部屋のドアを開けた。
 
 部屋の中央に、子どもが座っていた。
@@ -820,18 +1060,38 @@
 後ろ向きで、膝を抱えている。
 顔のあるところが——見えない。
 四角いノイズが、そこで点滅している。`,
+          text_en: `I opened the door to my room.
+
+In the center of the room, a child sat.
+
+Facing away, knees drawn up.
+Where the face should be ——
+a square of noise, flickering.`,
           ambient: "無音。この部屋だけ、音がない。",
+          ambient_en: "Silence. This room alone has no sound.",
           choices: [
-            { label: "声をかける", next: "child_talk" },
-            { label: "窓を開けてみる", next: "window_open" },
-            { label: "黙って観察する", next: "child_observe" },
+            {
+              label: "声をかける",
+              label_en: "Speak to them",
+              next: "child_talk",
+            },
+            {
+              label: "窓を開けてみる",
+              label_en: "Try opening the window",
+              next: "window_open",
+            },
+            {
+              label: "黙って観察する",
+              label_en: "Watch in silence",
+              next: "child_observe",
+            },
           ],
         },
 
-        // イベント2：対話の試み
         child_talk: {
           bg: "room",
           location: "2階 / 自分の部屋",
+          location_en: "2F / My Room",
           text: `「僕と君は同じだよ」
 
 声にしてみた。
@@ -839,16 +1099,29 @@
 しばらく、何も起きなかった。
 それから——ゆっくりと、
 あの子が振り返った。`,
+          text_en: `"You and I are the same."
+
+I said it out loud.
+
+For a while, nothing happened.
+Then —— slowly,
+the child turned around.`,
           ambient: "モザイクが揺れる。何かが変わろうとしている。",
+          ambient_en: "The pixels flicker. Something is about to change.",
           choices: [
-            { label: "抱きしめる", next: "child_hug" },
-            { label: "一歩引いて見守る", next: "child_watch_after_talk" },
+            { label: "抱きしめる", label_en: "Hold them", next: "child_hug" },
+            {
+              label: "一歩引いて見守る",
+              label_en: "Step back and watch",
+              next: "child_watch_after_talk",
+            },
           ],
         },
 
         child_hug: {
           bg: "room",
           location: "2階 / 自分の部屋",
+          location_en: "2F / My Room",
           text: `抱きしめると、小さかった。
 
 ずっと小さかった。
@@ -857,29 +1130,59 @@
 静かに座った。
 
 それだけで、十分な気がした。`,
+          text_en: `When I held them, they were small.
+
+They had always been small.
+
+The child faced forward
+and sat quietly.
+
+That felt like enough.`,
           ambient: "この瞬間だけ、部屋の空気が変わった気がした。",
+          ambient_en: "Just for this moment, the air in the room shifted.",
           choices: [
-            { label: "窓を開けてみる", next: "window_open" },
-            { label: "このまま部屋を出る", next: "ending_watch" },
+            {
+              label: "窓を開けてみる",
+              label_en: "Try opening the window",
+              next: "window_open",
+            },
+            {
+              label: "このまま部屋を出る",
+              label_en: "Leave the room",
+              next: "ending_watch",
+            },
           ],
         },
 
         child_watch_after_talk: {
           bg: "room",
           location: "2階 / 自分の部屋",
+          location_en: "2F / My Room",
           text: `振り返ってくれた。
 それだけで、今は十分かもしれない。
 
 無理に近づかなくていい。
 そう思った。`,
+          text_en: `They turned around.
+Maybe that's enough for now.
+
+I don't need to get any closer.
+I thought that.`,
           ambient: "あの子はこちらを見ている。",
-          choices: [{ label: "部屋を出る", next: "ending_watch" }],
+          ambient_en: "The child is looking this way.",
+          choices: [
+            {
+              label: "部屋を出る",
+              label_en: "Leave the room",
+              next: "ending_watch",
+            },
+          ],
         },
 
-        // イベント3：環境干渉実験
         window_open: {
           bg: "room",
           location: "2階 / 自分の部屋",
+          location_en: "2F / My Room",
           text: `カーテンを引いて、鍵を外して、
 窓を全部開けた。
 
@@ -887,14 +1190,28 @@
 この部屋には、風が来なかった。
 
 空気が、まったく動かない。`,
+          text_en: `I pulled back the curtains, unlocked the latch,
+and opened the window all the way.
+
+Outside, the leaves were moving ——
+but no wind came into this room.
+
+The air didn't move at all.`,
           ambient: "窓は開いている。でも閉じている。",
-          choices: [{ label: "もう少しそのままでいる", next: "window_wait" }],
+          ambient_en: "The window is open. But it's closed.",
+          choices: [
+            {
+              label: "もう少しそのままでいる",
+              label_en: "Stay like this a little longer",
+              next: "window_wait",
+            },
+          ],
         },
 
-        // イベント4：拒絶と逆戻り
         window_wait: {
           bg: "room",
           location: "2階 / 自分の部屋",
+          location_en: "2F / My Room",
           text: `背後に、気配がした。
 
 振り返ると——
@@ -902,14 +1219,30 @@
 
 至近距離で、こちらを覗き込んでいる。
 モザイクの向こうから、見られている。`,
+          text_en: `Something behind me.
+
+I turned ——
+the child was right there.
+
+Close. Looking into my face.
+Being watched from behind the pixels.`,
           ambient:
             "何かを伝えようとしているのか。それとも、ただそういうものなのか。",
-          choices: [{ label: "一歩下がって見守る", next: "child_retreat" }],
+          ambient_en:
+            "Trying to say something. Or maybe that's just what it is.",
+          choices: [
+            {
+              label: "一歩下がって見守る",
+              label_en: "Step back and watch",
+              next: "child_retreat",
+            },
+          ],
         },
 
         child_retreat: {
           bg: "room",
           location: "2階 / 自分の部屋",
+          location_en: "2F / My Room",
           text: `あの子はゆっくりと元の場所に戻り、
 また後ろを向いて座った。
 
@@ -917,13 +1250,28 @@
 
 変えようとするほど、
 閉じていく気がした。`,
+          text_en: `The child slowly returned to their place
+and sat facing away again.
+
+The same posture as before.
+
+The more I tried to change things,
+the more closed it became.`,
           ambient: "これが、あの子の安心する形なのかもしれない。",
-          choices: [{ label: "部屋を出る", next: "ending_watch" }],
+          ambient_en: "Maybe this is the shape that feels safe to them.",
+          choices: [
+            {
+              label: "部屋を出る",
+              label_en: "Leave the room",
+              next: "ending_watch",
+            },
+          ],
         },
 
         child_observe: {
           bg: "room",
           location: "2階 / 自分の部屋",
+          location_en: "2F / My Room",
           text: `何もせず、ただ見ていた。
 
 あの子は動かない。
@@ -931,11 +1279,31 @@
 こちらをずっと見つめ返している。
 
 見ているのか。見られているのか。`,
+          text_en: `I did nothing. Just watched.
+
+The child doesn't move.
+But —— seen from outside through the window,
+they're staring back.
+
+Am I watching? Or being watched?`,
           ambient: "境界が曖昧になる感じがした。",
+          ambient_en: "The boundary begins to blur.",
           choices: [
-            { label: "声をかける", next: "child_talk" },
-            { label: "窓を開けてみる", next: "window_open" },
-            { label: "そのまま部屋を出る", next: "ending_watch" },
+            {
+              label: "声をかける",
+              label_en: "Speak to them",
+              next: "child_talk",
+            },
+            {
+              label: "窓を開けてみる",
+              label_en: "Try opening the window",
+              next: "window_open",
+            },
+            {
+              label: "そのまま部屋を出る",
+              label_en: "Leave the room",
+              next: "ending_watch",
+            },
           ],
         },
 
@@ -943,6 +1311,7 @@
         ending_watch: {
           bg: "hallway",
           location: "2階 / 廊下",
+          location_en: "2F / Hallway",
           text: `部屋を出て、廊下から振り返った。
 
 あの子はまた後ろを向いて、
@@ -950,33 +1319,71 @@
 
 無理に変えなくていい。
 そう思った。`,
+          text_en: `I left the room and looked back from the hallway.
+
+The child is facing away again,
+sitting quietly.
+
+I don't need to force a change.
+I thought that.`,
           ambient: "廊下には光がある。外の空気が、ここまで届いている。",
-          choices: [{ label: "静かに合図を送る", next: "ending_signal" }],
+          ambient_en:
+            "There is light in the hallway. The outside air reaches here.",
+          choices: [
+            {
+              label: "静かに合図を送る",
+              label_en: "Send a quiet signal",
+              next: "ending_signal",
+            },
+          ],
         },
 
         ending_signal: {
           bg: "hallway",
           location: "2階 / 廊下",
+          location_en: "2F / Hallway",
           text: `部屋に向けて、静かに手を振った。
 
 返事はなかった。
 
 それでいいと思った。`,
+          text_en: `I quietly waved toward the room.
+
+There was no response.
+
+That was fine.`,
           ambient: "",
-          choices: [{ label: "さらに進む", next: "ending_final" }],
+          ambient_en: "",
+          choices: [
+            { label: "さらに進む", label_en: "Continue", next: "ending_final" },
+          ],
         },
 
         ending_final: {
           bg: "house",
           location: "",
+          location_en: "",
           text: `あの子は何かを守っていたのかもしれない。
 でも、もうそれはなくなったのかもしれない。
 
 ただ、そういうものとして、そこにある。
 いるように見えるけれど、あるだけ。`,
+          text_en: `Maybe the child was protecting something.
+But maybe that thing is already gone.
+
+It's just there — as that kind of thing.
+It looks like someone is there. But it merely exists.`,
           ambient: "",
+          ambient_en: "",
           isEnding: true,
-          choices: [{ label: "もう一度はじめる", next: "road", reset: true }],
+          choices: [
+            {
+              label: "もう一度はじめる",
+              label_en: "Play again",
+              next: "road",
+              reset: true,
+            },
+          ],
         },
       };
 
@@ -984,6 +1391,14 @@
       // ゲームエンジン
       // ============================================================
       let currentScene = "road";
+      let lang = "ja";
+
+      function toggleLang() {
+        lang = lang === "ja" ? "en" : "ja";
+        document.getElementById("lang-btn").textContent =
+          lang === "ja" ? "EN" : "JA";
+        loadScene(currentScene);
+      }
       let stepCount = 0;
       let gameStarted = false;
 
@@ -1157,15 +1572,25 @@
 
           setTimeout(() => {
             // テキストをセット＆表示
-            sceneText.textContent = scene.text;
+            sceneText.textContent =
+              lang === "ja" ? scene.text : scene.text_en || scene.text;
             sceneText.classList.add("visible");
 
-            if (scene.ambient) {
-              ambientText.textContent = scene.ambient;
+            if (scene.ambient || scene.ambient_en) {
+              ambientText.textContent =
+                lang === "ja"
+                  ? scene.ambient
+                  : scene.ambient_en || scene.ambient;
               ambientText.classList.add("visible");
             } else {
               ambientText.textContent = "";
             }
+
+            // ロケーション
+            document.getElementById("location-name").textContent =
+              lang === "ja"
+                ? scene.location
+                : scene.location_en || scene.location;
 
             // 選択肢を生成
             const container = document.getElementById("choices-container");
@@ -1174,7 +1599,8 @@
             scene.choices.forEach((choice) => {
               const btn = document.createElement("button");
               btn.className = "choice-btn";
-              btn.textContent = choice.label;
+              btn.textContent =
+                lang === "ja" ? choice.label : choice.label_en || choice.label;
               btn.onclick = () => handleChoice(choice);
               container.appendChild(btn);
             });
