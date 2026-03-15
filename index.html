@@ -497,8 +497,8 @@
 
     <!-- タイトル画面 -->
     <div id="title-screen">
-      <div id="title-main">閉じた家</div>
-      <div id="title-sub">a psychological exploration</div>
+      <div id="title-main" id="title-main">閉じた家</div>
+      <div id="title-sub" id="title-sub">a psychological exploration</div>
       <button id="start-btn" onclick="showOpening()">は じ め る</button>
     </div>
 
@@ -1397,7 +1397,22 @@ It looks like someone is there. But it merely exists.`,
         lang = lang === "ja" ? "en" : "ja";
         document.getElementById("lang-btn").textContent =
           lang === "ja" ? "EN" : "JA";
-        loadScene(currentScene);
+
+        // タイトル画面
+        document.getElementById("title-main").textContent =
+          lang === "ja" ? "閉じた家" : "Closed Room";
+        document.getElementById("title-sub").textContent =
+          lang === "ja" ? "" : "a psychological exploration";
+        document.getElementById("start-btn").textContent =
+          lang === "ja" ? "は じ め る" : "S T A R T";
+        document.getElementById("ai-continue").textContent =
+          lang === "ja" ? "続ける ›" : "Continue ›";
+
+        // ゲーム中なら画面更新
+        if (gameStarted) loadScene(currentScene);
+        // ゲーム中ラベル
+        document.getElementById("choices-label").textContent =
+          lang === "ja" ? "— 行動を選ぶ —" : "— Choose an action —";
       }
       let stepCount = 0;
       let gameStarted = false;
@@ -1407,42 +1422,76 @@ It looks like someone is there. But it merely exists.`,
         {
           type: "ai",
           text: "今日はどんなイメージが浮かんでいますか？",
+          text_en: "What images are coming to you today?",
           delay: 0,
         },
-        { type: "user", text: "家。子どもの頃の家。", delay: 1200 },
+        {
+          type: "user",
+          text: "家。子どもの頃の家。",
+          text_en: "A house. The house from my childhood.",
+          delay: 1200,
+        },
         {
           type: "ai",
           text: "その家の中に入ってみましょう。どんな場所から始まりますか？",
+          text_en: "Let's go inside that house. Where do you find yourself?",
           delay: 2400,
         },
-        { type: "user", text: "わからない。気づいたらいた。", delay: 3800 },
-        { type: "ai", text: "何が見えますか？", delay: 5000 },
+        {
+          type: "user",
+          text: "わからない。気づいたらいた。",
+          text_en: "I don't know. I just... found myself there.",
+          delay: 3800,
+        },
+        {
+          type: "ai",
+          text: "何が見えますか？",
+          text_en: "What do you see?",
+          delay: 5000,
+        },
         {
           type: "user",
           text: "子どもがいる。後ろを向いている。自分だと思う。顔が——",
+          text_en:
+            "There's a child. Facing away. I think it's me. The face is——",
           delay: 6400,
         },
-        { type: "user", text: "顔が見えない。モザイクみたいに。", delay: 8200 },
-        { type: "ai", text: "近づいてみますか？", delay: 9600 },
+        {
+          type: "user",
+          text: "顔が見えない。モザイクみたいに。",
+          text_en: "I can't see the face. Like pixels. Like static.",
+          delay: 8200,
+        },
+        {
+          type: "ai",
+          text: "近づいてみますか？",
+          text_en: "Would you like to get closer?",
+          delay: 9600,
+        },
         {
           type: "user",
           text: "近づこうとすると、何かが怖い。でも気になる。",
+          text_en:
+            "Something feels frightening when I try. But I'm drawn to it.",
           delay: 11000,
         },
         { type: "warning", delay: 13000 },
         {
           type: "user",
           text: "これは何ですか。どうすればいいですか。",
+          text_en: "What is this. What am I supposed to do.",
           delay: 15500,
         },
         {
           type: "ai",
           text: "今の状態を、もう少し観察してみましょう。何を感じていますか？",
+          text_en: "Let's observe this a little longer. What do you feel?",
           delay: 17000,
         },
         {
           type: "user",
           text: "怖い。でも——これは何なんだろう。",
+          text_en: "Scared. But—— what is this, really.",
           delay: 18800,
         },
       ];
@@ -1482,6 +1531,10 @@ It looks like someone is there. But it merely exists.`,
             } else {
               const line = document.createElement("div");
               const prefix = item.type === "ai" ? "AI　　" : "Ryo　";
+              const prefixEn = item.type === "ai" ? "AI　　" : "Ryo　";
+              const text =
+                lang === "ja" ? item.text : item.text_en || item.text;
+              line.textContent = `${prefix}${text}`;
               const color =
                 item.type === "ai" ? "var(--text-dim)" : "var(--text)";
               line.style.cssText = `color:${color}; margin-bottom:6px; opacity:0; transition:opacity 0.6s ease;`;
@@ -1532,6 +1585,10 @@ It looks like someone is there. But it merely exists.`,
         const overlay = document.getElementById("overlay");
 
         overlay.classList.add("active");
+
+        // BGM（loadScene内）
+        const bgmFile = sceneBgmOverride[sceneId] || bgmMap[scene.bg];
+        if (bgmFile && gameStarted) playBgm(bgmFile); // ← gameStarted条件を追加
 
         setTimeout(() => {
           const scene = scenes[sceneId];
@@ -1591,6 +1648,9 @@ It looks like someone is there. But it merely exists.`,
               lang === "ja"
                 ? scene.location
                 : scene.location_en || scene.location;
+
+            document.getElementById("choices-label").textContent =
+              lang === "ja" ? "— 行動を選ぶ —" : "— Choose an action —";
 
             // 選択肢を生成
             const container = document.getElementById("choices-container");
