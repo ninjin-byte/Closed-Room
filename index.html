@@ -1101,15 +1101,13 @@
             } else {
               const line = document.createElement("div");
               const prefix = item.type === "ai" ? "AI　　" : "Ryo　";
-              const prefixEn = item.type === "ai" ? "AI　　" : "Ryo　";
               const text =
                 lang === "ja" ? item.text : item.text_en || item.text;
-              line.textContent = `${prefix}${text}`;
               const color =
                 item.type === "ai" ? "var(--text-dim)" : "var(--text)";
               line.style.cssText = `color:${color}; margin-bottom:6px; opacity:0; transition:opacity 0.6s ease;`;
-              line.textContent = `${prefix}${item.text}`;
-              playSe("keyboard"); // ← この1行を追加
+              line.textContent = `${prefix}${text}`;
+              playSe("keyboard");
               logInner.appendChild(line);
               requestAnimationFrame(() =>
                 requestAnimationFrame(() => {
