@@ -76,6 +76,7 @@
         justify-content: space-between;
         align-items: baseline;
         border-bottom: 1px solid var(--border);
+        background: rgba(14, 13, 11, 0.6); /* ← 追加 */
       }
 
       #location-name {
@@ -85,6 +86,7 @@
         color: var(--text-dim);
         text-transform: uppercase;
         transition: opacity 0.8s;
+        text-shadow: 0 0 8px rgba(0, 0, 0, 0.8); /* ← 追加 */
       }
 
       #step-count {
@@ -102,8 +104,13 @@
         padding: 20px 0 16px;
         overflow: hidden;
         min-height: 0;
+        background: linear-gradient(
+          to right,
+          rgba(14, 13, 11, 0.75) 0%,
+          rgba(14, 13, 11, 0.55) 70%,
+          rgba(14, 13, 11, 0) 100%
+        );
       }
-
       #scene-text {
         font-size: 15px;
         line-height: 2.2;
@@ -477,7 +484,7 @@
         top: 16px;
         right: 16px;
         z-index: 100;
-        background: transparent;
+        background: rgba(0, 0, 0, 0.3); /* ← transparentから変更 */
         border: 1px solid var(--text-dim);
         color: var(--text-dim);
         font-size: 0.75rem;
@@ -1597,8 +1604,11 @@ It looks like someone is there. But it merely exists.`,
           if (scene.bg && BG[scene.bg]) {
             bgEl.style.backgroundImage = `url(${BG[scene.bg]})`;
             bgEl.classList.add("visible");
+            // entranceだけ暗くする
+            bgEl.style.filter = "brightness(1)";
           } else {
             bgEl.classList.remove("visible");
+            bgEl.style.filter = "brightness(1)";
           }
 
           // ↓ この1行を追加
