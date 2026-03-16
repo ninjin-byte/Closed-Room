@@ -1387,8 +1387,8 @@ It looks like someone is there. But it merely exists.`,
           choices: [
             {
               label: "もう一度はじめる",
-              label_en: "Play again",
-              next: "road",
+              label_en: "Return to title",
+              next: null,
               reset: true,
             },
           ],
@@ -1574,13 +1574,13 @@ It looks like someone is there. But it merely exists.`,
 
       function startGame() {
         document.getElementById("title-screen").classList.add("hidden");
+        document.getElementById("bg").classList.remove("visible");
         setTimeout(() => {
           gameStarted = true;
           loadScene("road");
           document.getElementById("memo").classList.add("visible");
         }, 1500);
       }
-
       function loadScene(sceneId, delay = 0) {
         const overlay = document.getElementById("overlay");
 
@@ -1661,7 +1661,10 @@ It looks like someone is there. But it merely exists.`,
               btn.className = "choice-btn";
               btn.textContent =
                 lang === "ja" ? choice.label : choice.label_en || choice.label;
-              btn.onclick = () => handleChoice(choice);
+              btn.onclick =
+                choice.next === null
+                  ? returnToTitle
+                  : () => handleChoice(choice);
               container.appendChild(btn);
             });
             choicesArea.classList.add("visible");
@@ -1680,6 +1683,28 @@ It looks like someone is there. But it merely exists.`,
         playSe("click");
         if (choice.reset) stepCount = 0;
         loadScene(choice.next);
+      }
+
+      function returnToTitle() {
+        playSe("click");
+        stepCount = 0;
+        gameStarted = false;
+        document.getElementById("game").classList.remove("ending");
+        document.getElementById("bg").classList.remove("visible");
+        document.getElementById("scene-text").classList.remove("visible"); // ← 追加
+        document.getElementById("ambient-text").classList.remove("visible"); // ← 追加
+        document.getElementById("choices-area").classList.remove("visible"); // ← 追加
+        if (currentBgm) {
+          currentBgm.pause();
+          currentBgm.currentTime = 0;
+          currentBgm = null;
+        }
+        document.getElementById("title-screen").classList.remove("hidden");
+        document.getElementById("title-main").textContent =
+          lang === "ja" ? "閉じた家" : "Closed Room";
+        document.getElementById("start-btn").textContent =
+          lang === "ja" ? "は じ め る" : "S T A R T";
+        document.getElementById("start-btn").onclick = startGame;
       }
     </script>
   </body>
