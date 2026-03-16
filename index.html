@@ -134,7 +134,7 @@
         color: var(--text-dim);
         font-style: italic;
         opacity: 0;
-        transition: opacity 1.2s ease 0.4s;
+        transition: opacity 0.3s ease; /* 遅延を削除、速度を短く */
       }
       #ambient-text.visible {
         opacity: 1;
@@ -145,7 +145,7 @@
         flex-shrink: 0;
         padding-bottom: 24px;
         opacity: 0;
-        transition: opacity 0.6s ease 0.6s;
+        transition: opacity 0.3s ease;
       }
       #choices-area.visible {
         opacity: 1;
@@ -1589,18 +1589,18 @@ It looks like someone is there. But it merely exists.`,
 
         overlay.classList.add("active");
 
+        // テキストをリセット
+        const sceneText = document.getElementById("scene-text");
+        const ambientText = document.getElementById("ambient-text");
+        const choicesArea = document.getElementById("choices-area");
+
+        sceneText.classList.remove("visible");
+        ambientText.classList.remove("visible");
+        choicesArea.classList.remove("visible");
+
         setTimeout(() => {
           const scene = scenes[sceneId];
           currentScene = sceneId;
-
-          // テキストをリセット
-          const sceneText = document.getElementById("scene-text");
-          const ambientText = document.getElementById("ambient-text");
-          const choicesArea = document.getElementById("choices-area");
-
-          sceneText.classList.remove("visible");
-          ambientText.classList.remove("visible");
-          choicesArea.classList.remove("visible");
 
           // 背景画像切り替え
           const bgEl = document.getElementById("bg");
