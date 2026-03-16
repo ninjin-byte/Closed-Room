@@ -146,6 +146,12 @@
         padding-bottom: 24px;
         opacity: 0;
         transition: opacity 0.3s ease;
+        background: linear-gradient(
+          to right,
+          rgba(14, 13, 11, 0.75) 0%,
+          rgba(14, 13, 11, 0.55) 70%,
+          rgba(14, 13, 11, 0) 100%
+        );
       }
       #choices-area.visible {
         opacity: 1;
@@ -156,6 +162,7 @@
         letter-spacing: 0.4em;
         color: var(--text-dim);
         margin-bottom: 16px;
+        text-shadow: 0 0 8px rgba(0, 0, 0, 0.9); /* ← 追加 */
       }
 
       .choice-btn {
