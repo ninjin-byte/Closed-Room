@@ -470,6 +470,26 @@
       #memo.visible {
         opacity: 1;
       }
+      #lang-btn {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        z-index: 100;
+        background: transparent;
+        border: 1px solid var(--text-dim);
+        color: var(--text-dim);
+        font-size: 0.75rem;
+        letter-spacing: 0.1em;
+        padding: 4px 10px;
+        cursor: pointer;
+        transition:
+          color 0.3s,
+          border-color 0.3s;
+      }
+      #lang-btn:hover {
+        color: var(--text);
+        border-color: var(--text);
+      }
     </style>
   </head>
   <body>
