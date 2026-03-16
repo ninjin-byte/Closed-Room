@@ -1578,6 +1578,7 @@ It looks like someone is there. But it merely exists.`,
       function startGame() {
         document.getElementById("title-screen").classList.add("hidden");
         document.getElementById("bg").classList.remove("visible");
+        document.getElementById("game").style.opacity = "1"; // ← 追加
         setTimeout(() => {
           gameStarted = true;
           loadScene("road");
@@ -1693,10 +1694,11 @@ It looks like someone is there. But it merely exists.`,
         stepCount = 0;
         gameStarted = false;
         document.getElementById("game").classList.remove("ending");
+        document.getElementById("game").style.opacity = "0"; // ← 追加
         document.getElementById("bg").classList.remove("visible");
-        document.getElementById("scene-text").classList.remove("visible"); // ← 追加
-        document.getElementById("ambient-text").classList.remove("visible"); // ← 追加
-        document.getElementById("choices-area").classList.remove("visible"); // ← 追加
+        document.getElementById("scene-text").classList.remove("visible");
+        document.getElementById("ambient-text").classList.remove("visible");
+        document.getElementById("choices-area").classList.remove("visible");
         if (currentBgm) {
           currentBgm.pause();
           currentBgm.currentTime = 0;
