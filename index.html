@@ -397,19 +397,22 @@
       #game.ending .choice-btn {
         display: inline-block;
         width: auto;
-        background: none;
-        border: none;
+        background: rgba(14, 13, 11, 0.6); /* noneから変更 */
+        border: 1px solid var(--border); /* noneから変更 */
         color: var(--text-dim);
         font-size: 11px;
         letter-spacing: 0.4em;
-        padding: 8px 0;
+        padding: 8px 16px;
+        text-shadow: none;
       }
       #game.ending .choice-btn::before {
         display: none;
       }
       #game.ending .choice-btn:hover {
+        background: rgba(14, 13, 11, 0.8);
+        border-color: var(--accent);
         color: var(--text);
-        background: none;
+        text-shadow: none;
       }
 
       /* 背景画像 */
