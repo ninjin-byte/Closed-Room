@@ -515,6 +515,7 @@
     </div>
 
     <div id="memo"></div>
+    <button id="lang-btn" onclick="toggleLang()">EN</button>
 
     <script>
       // ============================================================
@@ -985,6 +986,18 @@
       // ============================================================
       let currentScene = "road";
       let lang = "ja";
+      function toggleLang() {
+        lang = lang === "ja" ? "en" : "ja";
+        document.getElementById("lang-btn").textContent =
+          lang === "ja" ? "EN" : "JA";
+        document.getElementById("title-main").textContent =
+          lang === "ja" ? "閉じた家" : "Closed Room";
+        document.getElementById("start-btn").textContent =
+          lang === "ja" ? "は じ め る" : "S T A R T";
+        document.getElementById("ai-continue").textContent =
+          lang === "ja" ? "続ける ›" : "Continue ›";
+        if (gameStarted) loadScene(currentScene);
+      }
       let stepCount = 0;
       let gameStarted = false;
 
