@@ -326,6 +326,7 @@
       .ai-warning {
         display: block;
         margin-top: 20px;
+        margin-bottom: 20px; /* ← この1行を追加 */
         padding: 16px 20px;
         border: 1px solid #5a3a2a;
         background: #1a0e08;
@@ -333,6 +334,7 @@
         font-size: 12px;
         line-height: 2;
         letter-spacing: 0.06em;
+        white-space: pre-line;
       }
 
       .ai-warning-label {
@@ -1467,7 +1469,7 @@ It looks like someone is there. But it merely exists.`,
         { type: "warning", delay: 13000 },
         {
           type: "user",
-          text: "これは何ですか。どうすればいいですか。",
+          text: "これは、何？どうすれば——",
           text_en: "What is this. What am I supposed to do.",
           delay: 15500,
         },
@@ -1515,7 +1517,11 @@ It looks like someone is there. But it merely exists.`,
             if (item.type === "warning") {
               const warn = document.createElement("span");
               warn.className = "ai-warning";
-              warn.innerHTML = `<span class="ai-warning-label">⚠ SYSTEM NOTICE</span>この会話には、医療的なサポートが必要な場合があります。\n引き続き進める場合は、信頼できる専門家への相談も検討してください。`;
+              const warningText =
+                lang === "ja"
+                  ? "この会話には、心理的に負荷のかかる内容が含まれます。\n続ける場合は、自分のペースで進めてください。"
+                  : "This session contains content that may be psychologically distressing.\nProceed at your own pace.";
+              warn.innerHTML = `<span class="ai-warning-label">⚠ SYSTEM NOTICE</span>${warningText}`;
               logInner.appendChild(warn);
             } else {
               const line = document.createElement("div");
