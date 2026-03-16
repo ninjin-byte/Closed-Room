@@ -1154,10 +1154,6 @@
 
         overlay.classList.add("active");
 
-        // BGM（loadScene内）
-        const bgmFile = sceneBgmOverride[sceneId] || bgmMap[scene.bg];
-        if (bgmFile && gameStarted) playBgm(bgmFile); // ← gameStarted条件を追加
-
         setTimeout(() => {
           const scene = scenes[sceneId];
           currentScene = sceneId;
