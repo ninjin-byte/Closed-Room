@@ -1178,18 +1178,61 @@ And that was what frightened me.`,
           ambient_en: "Just for this moment, the air in the room shifted.",
           choices: [
             {
-              label: "窓を開けてみる",
-              label_en: "Try opening the window",
-              next: "window_open",
+              label: "離れてもらう",
+              label_en: "Ask them to step back",
+              next: "child_instruction",
             },
+          ],
+        },
+        child_instruction: {
+          bg: "room",
+          location: "2階 / 自分の部屋",
+          location_en: "2F / My Room",
+          text: `「座って、待っていてくれ」
+
+声に出した。
+自分でも、なぜそう言ったのかわからなかった。`,
+          text_en: `"Sit. Wait for me."
+
+I said it out loud.
+I didn't know why.`,
+          ambient: "",
+          ambient_en: "",
+          choices: [
+            { label: "様子を見る", label_en: "Watch", next: "child_obey" },
+          ],
+        },
+
+        child_obey: {
+          bg: "room",
+          location: "2階 / 自分の部屋",
+          location_en: "2F / My Room",
+          text: `あの子は、従った。
+
+後ろを向いて、正座して、
+静かに待っていた。
+
+指示が通った。
+それが——安心なのか、
+悲しいのか、わからなかった。`,
+          text_en: `They obeyed.
+
+Facing away, kneeling,
+waiting quietly.
+
+The instruction worked.
+I didn't know if that felt like relief
+or something sadder.`,
+          ambient: "",
+          ambient_en: "",
+          choices: [
             {
-              label: "このまま部屋を出る",
+              label: "部屋を出る",
               label_en: "Leave the room",
               next: "ending_watch",
             },
           ],
         },
-
         child_watch_after_talk: {
           bg: "room",
           location: "2階 / 自分の部屋",
