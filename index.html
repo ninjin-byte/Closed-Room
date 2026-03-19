@@ -1426,14 +1426,26 @@ The light will help.`,
           bg: "house",
           location: "",
           location_en: "",
-          text: `（仮テキスト：2回目の別日演出）`,
-          text_en: `(placeholder: interlude 2)`,
-          ambient: "",
-          ambient_en: "",
+          text: `従ってくれた。
+それが、少し怖かった。
+
+でも、また行こうと思っている。
+行かなければならない、気がする。
+
+今度は——もう少し、ちゃんと見る。`,
+          text_en: `They listened.
+
+That frightened me a little.
+But I'm going to go back.
+I feel like I have to.
+
+This time —— I'll look more carefully.`,
+          ambient: "あの子は、待っているかもしれない。",
+          ambient_en: "The child might still be waiting.",
           onEnter: () => {
             day = 2;
           },
-          choices: [{ label: "つづく", label_en: "Continue", next: "road" }],
+          choices: [{ label: "翌日", label_en: "The next day", next: "road" }],
         },
 
         // ---- エンディング ----
