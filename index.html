@@ -1401,19 +1401,25 @@
 確かめてみたい。
 また行こうと思っている。
 
-ただ、気になる。それだけだ。`,
+ただ、気になる。それだけだ。
+
+次は、昼に行こう。
+明るい方がいい。`,
           text_en: `What was that.
 
 I want to find out.
 I'm going to go back.
 
-I'm just curious. That's all.`,
-          ambient: "",
-          ambient_en: "",
+I'm just curious. That's all.
+
+Next time, I'll go during the day.
+The light will help.`,
+          ambient: "明るければ、ちがうかもしれない。",
+          ambient_en: "It might be different in the light.",
           onEnter: () => {
             day = 1;
           },
-          choices: [{ label: "つづく", label_en: "Continue", next: "road" }],
+          choices: [{ label: "翌日", label_en: "The next day", next: "road" }],
         },
 
         interlude_2: {
