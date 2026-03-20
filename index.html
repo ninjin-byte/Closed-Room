@@ -1169,7 +1169,7 @@ a square of noise, flickering.`,
                   next: "child_observe",
                 },
               ];
-            } else {
+            } else if (day === 1) {
               scene.choices = [
                 {
                   label: "声をかける",
@@ -1182,19 +1182,18 @@ a square of noise, flickering.`,
                   next: "child_observe",
                 },
               ];
+            } else {
+              scene.choices = [
+                {
+                  label: "引き返す",
+                  label_en: "Turn back",
+                  next: "floor2_intro",
+                },
+              ];
             }
           },
           choices: [
-            {
-              label: "声をかける",
-              label_en: "Speak to them",
-              next: "child_talk",
-            },
-            {
-              label: "黙って観察する",
-              label_en: "Watch in silence",
-              next: "child_observe",
-            },
+            { label: "引き返す", label_en: "Turn back", next: "floor2_intro" },
           ],
         },
 
