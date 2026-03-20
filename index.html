@@ -1019,20 +1019,71 @@
           location_en: "2F / Outside Mother's Room",
           text: `母の部屋のドアに近づいた。
 
-                  後ろ向きでうずくまる気配が、
-                  ドア越しに伝わってくる。
+後ろ向きでうずくまる気配が、
+ドア越しに伝わってくる。
 
-                  引き寄せられるように、
-                  ノブに手が伸びた。`,
+引き寄せられるように、
+ノブに手が伸びた。`,
           text_en: `I approached my mother's door.
 
-                  Something crouched, facing away —
-                  I could feel it through the door.
+Something crouched, facing away ——
+I could feel it through the door.
 
-                  As if drawn in,
-                  my hand reached for the knob.`,
+As if drawn in,
+my hand reached for the knob.`,
           ambient: "ドアの向こうに、何かがいる。",
           ambient_en: "Something is on the other side.",
+          onEnter: function () {
+            const scene = scenes.mother_approach;
+            if (day >= 1) {
+              scene.text = `母の部屋のドアの前に立った。
+
+今日は、ここではない。
+そう思った。`;
+              scene.text_en = `I stood before my mother's door.
+
+Not here. Not today.
+That's what I told myself.`;
+              scene.ambient = "引き返す理由は、ある。";
+              scene.ambient_en = "There's a reason to turn back.";
+              scene.choices = [
+                {
+                  label: "引き返す",
+                  label_en: "Turn back",
+                  next: "floor2_intro",
+                },
+              ];
+            } else {
+              scene.text = `母の部屋のドアに近づいた。
+
+後ろ向きでうずくまる気配が、
+ドア越しに伝わってくる。
+
+引き寄せられるように、
+ノブに手が伸びた。`;
+              scene.text_en = `I approached my mother's door.
+
+Something crouched, facing away ——
+I could feel it through the door.
+
+As if drawn in,
+my hand reached for the knob.`;
+              scene.ambient = "ドアの向こうに、何かがいる。";
+              scene.ambient_en = "Something is on the other side.";
+              scene.choices = [
+                {
+                  label: "ドアを開ける",
+                  label_en: "Open the door",
+                  next: "mother_attack",
+                },
+                {
+                  label: "引き返す",
+                  label_en: "Turn back",
+                  next: "floor2_intro",
+                },
+              ];
+            }
+          },
           choices: [
             {
               label: "ドアを開ける",
