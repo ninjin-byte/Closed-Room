@@ -1089,20 +1089,50 @@
           location_en: "2F / My Room",
           text: `自分の部屋のドアを開けた。
 
-                  部屋の中央に、子どもが座っていた。
+部屋の中央に、子どもが座っていた。
 
-                  後ろ向きで、膝を抱えている。
-                  顔のあるところが——見えない。
-                  四角いノイズが、そこで点滅している。`,
+後ろ向きで、膝を抱えている。
+顔のあるところが——見えない。
+四角いノイズが、そこで点滅している。`,
           text_en: `I opened the door to my room.
 
-                  In the center of the room, a child sat.
+In the center of the room, a child sat.
 
-                  Facing away, knees drawn up.
-                  Where the face should be ——
-                  a square of noise, flickering.`,
+Facing away, knees drawn up.
+Where the face should be ——
+a square of noise, flickering.`,
           ambient: "無音。この部屋だけ、音がない。",
           ambient_en: "Silence. This room alone has no sound.",
+          onEnter: function () {
+            const scene = scenes.myroom_intro;
+            if (day >= 2) {
+              scene.choices = [
+                {
+                  label: "窓を開ける",
+                  label_en: "Open the window",
+                  next: "window_open",
+                },
+                {
+                  label: "黙って観察する",
+                  label_en: "Watch in silence",
+                  next: "child_observe",
+                },
+              ];
+            } else {
+              scene.choices = [
+                {
+                  label: "声をかける",
+                  label_en: "Speak to them",
+                  next: "child_talk",
+                },
+                {
+                  label: "黙って観察する",
+                  label_en: "Watch in silence",
+                  next: "child_observe",
+                },
+              ];
+            }
+          },
           choices: [
             {
               label: "声をかける",
