@@ -30,6 +30,7 @@
 /
 ├── index.html ゲーム本体（すべてこの1ファイルに収録）
 ├── bgm_explore.mp3
+├── bgm_explore_day.mp3
 ├── bgm_mother.mp3
 ├── bgm_ending.mp3
 ├── se_click.mp3
