@@ -1822,6 +1822,13 @@ It looks like someone is there. But it merely exists.`,
       function proceedFromOpening() {
         const aiWindow = document.getElementById("ai-window");
         aiWindow.style.opacity = "0";
+
+        // 追加
+        const continueBtn = document.getElementById("ai-continue");
+        continueBtn.classList.remove("visible");
+        continueBtn.style.opacity = "0";
+        continueBtn.style.pointerEvents = "none";
+
         setTimeout(() => {
           aiWindow.classList.remove("active");
           gameStarted = true;
