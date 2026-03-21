@@ -585,6 +585,20 @@
         room: "bgm_explore.mp3",
       };
 
+      const bgmFile =
+        sceneBgmOverride[sceneId] ||
+        (day > 0 ? bgmMap_day[displayScene.bg] : bgmMap[displayScene.bg]);
+      if (bgmFile) playBgm(bgmFile);
+
+      const bgmMap_day = {
+        house: "bgm_explore_day.mp3",
+        entrance: "bgm_explore_day.mp3",
+        kitchen: "bgm_explore_day.mp3",
+        stairs: "bgm_explore_day.mp3",
+        hallway: "bgm_explore_day.mp3",
+        room: "bgm_explore_day.mp3",
+      };
+
       // 母の部屋・エンディングは個別に上書き
       const sceneBgmOverride = {
         mother_attack: "bgm_mother.mp3",
