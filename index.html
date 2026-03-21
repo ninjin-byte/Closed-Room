@@ -1507,7 +1507,7 @@ Am I watching? Or being watched?`,
 
         // ---- interludeシーン ----
         interlude_1: {
-          bg: "house",
+          bg: "",
           location: "",
           location_en: "",
           text: `あれは、なんだったのか。
@@ -1523,7 +1523,12 @@ Am I watching? Or being watched?`,
       I'm just curious. That's all.`,
           ambient: "",
           ambient_en: "",
-          onEnter: () => {
+          onEnter: function () {
+            if (day === 0) {
+              playBgm("bgm_explore.mp3");
+            } else {
+              playBgm("bgm_explore_day.mp3");
+            }
             day = 1;
           },
           choices: [
@@ -1532,7 +1537,7 @@ Am I watching? Or being watched?`,
         },
 
         interlude_2: {
-          bg: "house",
+          bg: "",
           location: "",
           location_en: "",
           text: `従ってくれた。
