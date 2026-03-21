@@ -372,12 +372,14 @@
         cursor: pointer;
         padding: 8px 0;
         opacity: 0;
+        pointer-events: none; /* 追加 */
         transition:
           opacity 0.6s ease,
           color 0.2s;
       }
       #ai-continue.visible {
         opacity: 1;
+        pointer-events: auto; /* 追加 */
       }
       #ai-continue:hover {
         color: var(--text);
@@ -626,9 +628,9 @@
       };
 
       function playSe(name) {
-        const sound = se[name];
-        if (!sound) return;
-        sound.currentTime = 0;
+        const src = name === "click" ? "se_click.mp3" : "se_keyboard.mp3";
+        const sound = new Audio(src);
+        sound.volume = 0.8;
         sound.play().catch(() => {});
       }
 
@@ -1785,7 +1787,11 @@ It looks like someone is there. But it merely exists.`,
             } else {
               const line = document.createElement("div");
               const prefix = item.type === "ai" ? "AI　　" : "Ryo　";
-              if (item.type === "user") playSe("keyboard");
+              if (item.type === "user") {
+                const sound = new Audio("se_keyboard.mp3");
+                sound.volume = 1.0;
+                sound.play().catch(() => {});
+              }
               const text =
                 lang === "ja" ? item.text : item.text_en || item.text;
               const color =
