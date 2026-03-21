@@ -1444,20 +1444,45 @@ a square of noise, flickering.`,
           location_en: "2F / My Room",
           text: `何もせず、ただ見ていた。
 
-                  あの子は動かない。
-                  でも——外から窓越しに見ると、
-                  こちらをずっと見つめ返している。
+あの子は動かない。
+でも——外から窓越しに見ると、
+こちらをずっと見つめ返している。
 
-                  見ているのか。見られているのか。`,
+見ているのか。見られているのか。`,
           text_en: `I did nothing. Just watched.
 
-                  The child doesn't move.
-                  But —— looking in from outside through the window,
-                  they're staring back.
+The child doesn't move.
+But —— looking in from outside through the window,
+they're staring back.
 
-                  Am I watching? Or being watched?`,
+Am I watching? Or being watched?`,
           ambient: "境界が曖昧になる感じがした。",
           ambient_en: "The boundary begins to blur.",
+          onEnter: function () {
+            const scene = scenes.child_observe;
+            if (day >= 2) {
+              scene.choices = [
+                {
+                  label: "そのまま部屋を出る",
+                  label_en: "Leave the room",
+                  next: "interlude_2",
+                },
+              ];
+            } else {
+              scene.choices = [
+                {
+                  label: "声をかける",
+                  label_en: "Speak to them",
+                  next: "child_talk",
+                },
+                {
+                  label: "そのまま部屋を出る",
+                  label_en: "Leave the room",
+                  next: "interlude_1",
+                },
+              ];
+            }
+          },
           choices: [
             {
               label: "声をかける",
